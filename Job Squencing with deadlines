@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+ {
+	int t; cin>>t;
+	while(t--){
+	    int n,mx=0; cin>>n;
+	    pair<int,int> arr[n];
+	    for(int i=0;i<n;i++){
+	        int id,dead,pro; cin>>id>>dead>>pro;
+	        arr[i].first=pro; arr[i].second=dead;
+	        if(dead>mx) mx=dead;
+	    }
+	    sort(arr,arr+n);
+	    int jobs=0;
+	    int dead[mx+1]={0};
+	    for(int i=n-1;i>=0;i--){
+	        int m=arr[i].second-1;
+	        while(m>=0){
+	            if(dead[m]==0){
+	                dead[m]=arr[i].first;
+	                jobs++;
+	                break;
+	                
+	            }
+	            m--;
+	        }
+	    }
+	    int sum=0;
+	    for(int i=0;i<=mx;i++){
+	        sum+=dead[i];
+	    }
+	    cout<<jobs<<" "<<sum<<endl;
+	}
+}
