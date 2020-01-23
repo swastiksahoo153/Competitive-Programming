@@ -1,0 +1,46 @@
+// Social Networking Graph
+
+    #include <bits/stdc++.h>
+    using namespace std;
+    #define pb push_back
+     
+    int n;
+     
+    int  bfs(int node,int step, vector<int> adj[]){
+        int dist[n];    memset(dist,0,sizeof(dist));
+        int vis[n];     memset(vis,0,sizeof(vis));
+        int ct=0;
+        queue<int> q;
+        q.push(node); vis[node]=1;
+        while(!q.empty()){
+            int cur=q.front();
+            q.pop();
+            // cout<<cur<<" ";
+            for(int i=0;i<adj[cur].size();i++){
+                if(!vis[adj[cur][i]]){
+                    vis[adj[cur][i]]=1;
+                    q.push(adj[cur][i]);
+                    dist[adj[cur][i]]=dist[cur]+1;
+                    if(dist[adj[cur][i]]==step) ct++;
+                }
+            }
+        }
+        return ct;
+    }
+     
+    int main(){
+        int e; cin>>n>>e;
+        vector<int> adj[n+1];
+        
+        for(int i=0;i<e;i++){
+            int u,v; cin>>u>>v;
+            adj[u].pb(v);
+            adj[v].pb(u);
+        }
+        int m; cin>>m;
+        for(int i=0;i<m;i++){
+            int node,step; cin>>node>>step;
+            cout<<bfs(node,step,adj)<<endl;
+        }
+        
+    }
