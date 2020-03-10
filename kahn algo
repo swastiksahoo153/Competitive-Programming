@@ -1,0 +1,37 @@
+int* topoSort(int V, vector<int> adj[]) {
+    // Your code here
+    int indeg[V]={0};
+    
+    static int topo[50];
+    
+    // compute indegree for each vertex
+    for(int i=0;i<V;i++){
+        for(int j=0;j<adj[i].size();j++){
+            indeg[adj[i][j]]++;
+        }
+    }
+    
+    int visct=0;
+    
+    queue<int> q;
+    
+    // push all vetrices whose indegree is 0
+    for(int i=0;i<V;i++){
+        if(indeg[i]==0) q.push(i);
+    }
+    
+    while(!q.empty()){
+        int front=q.front();
+        topo[visct]=front;
+        q.pop();
+        visct++;
+        
+        // decr indegree of all neighbouring vertices by 1 and push if indeg is 0
+        for(int i=0;i<adj[front].size();i++){
+            indeg[adj[front][i]]--;
+            if(indeg[adj[front][i]]==0) q.push(adj[front][i]);
+        }
+    }
+    
+    return topo;
+}
