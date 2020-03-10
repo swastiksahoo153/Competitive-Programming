@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+
+int find(pair<int,int> parent[],int element){
+     if(parent[element].first==element) return element;
+     find(parent,parent[element].first);
+}
+
+void Union(pair<int,int> parent[],int x,int y){
+    int xroot=find(parent,x);
+    int yroot=find(parent,y);
+    
+    if(xroot==yroot) return;
+    
+    if(parent[xroot].second<parent[yroot].second){
+        parent[xroot].first=yroot;
+    }
+    else if(parent[yroot].second<parent[xroot].second){
+        parent[yroot].first=xroot;
+    }
+    else{
+        parent[xroot].first=yroot;
+        parent[yroot].second++;
+    }
+}
+
+bool isCycle(vector<int> adj[],int v,vector<pair<int,int>> edges){
+    pair<int,int> parent[v];
+    for(int i=0;i<v;i++){
+        parent[i].first=i;
+        parent[i].second=0;
+    }
+    
+    for(int i=0;i<edges.size();i++){
+        int x=find(parent,edges[i].first);
+        int y=find(parent,edges[i].second);
+        
+        if(x==y) return 1;
+        
+        Union(parent,x,y);
+    }
+    return 0;
+}
+
+int main() {
+    int t; cin>>t;
+    while(t--){
+        int v,e; cin>>v>>e;
+        vector<int> adj[v];
+        vector<pair<int,int>> edges;
+        
+        for(int i=0;i<e;i++){
+            int a,b; cin>>a>>b;
+            edges.push_back({a,b});
+        }
+        
+        if(isCycle(adj,v,edges)) cout<<1;
+        else cout<<0;
+    }
+    
+	return 0;
+}
