@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void DFSUtil(int u,vector<int> adj[],bool vis[],int parent[],int disc[],int low[],bool ap[]){
+	vis[u]=true;
+	static int time=0;
+	low[u]=disc[u]=++time;
+	
+	int children=0;
+	
+	for(int i=0;i<adj[u].size();i++){
+		int v=adj[u][i];
+		if(!vis[v]){
+			parent[v]=u;
+			children++;
+			DFSUtil(v,adj,vis,parent,disc,low,ap);
+			low[u]=min(low[u],low[v]);
+			
+			if (parent[u] == -1 && children > 1) 
+               ap[u] = true; 
+               
+            if(parent[u]!=-1 && disc[u]<=low[v]) ap[u]=true;
+		}
+		else if(parent[u]!=v){
+			low[u]=min(low[u],disc[v]);
+		}
+	}
+}
+
+void DFS(vector<int> adj[],int v){
+	bool vis[v]; bool ap[v];
+	int disc[v]; int low[v];
+	int parent[v];
+	
+	for(int i=0;i<v;i++){
+		vis[i]=false;
+		ap[i]=false;
+		parent[i]=-1;
+	}
+	
+	for(int i=0;i<v;i++){
+		if(!vis[i]){
+			DFSUtil(i,adj,vis,parent,disc,low,ap);
+		}
+	}
+	
+	for(int i=0;i<v;i++){
+		if(ap[i]) cout<<i<<" ";
+	}
+}
+
+int main(){
+	int v,e; cin>>v>>e;
+	vector<int> adj[v];
+	for(int i=0;i<e;i++){
+		int a,b; cin>>a>>b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+	
+	DFS(adj,v);
+}
