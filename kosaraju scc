@@ -1,0 +1,58 @@
+void DFSUtil(vector<int> adj[],bool vis[],int u){
+    vis[u]=true;
+    for(int i=0;i<adj[u].size();i++){
+        if(!vis[adj[u][i]]){
+            DFSUtil(adj,vis,adj[u][i]);
+        }
+    }
+    
+}
+
+void getTranspose(vector<int> tradj[],vector<int> adj[],int V){
+    for(int u=0;u<V;u++){
+        for(int i=0;i<adj[u].size();i++){
+            tradj[adj[u][i]].push_back(u);
+        }
+    }
+}
+
+void fillStack(vector<int> adj[],bool vis[],int u,stack<int> &s){
+    vis[u]=true;
+    
+    for(int i=0;i<adj[u].size();i++){
+        if(!vis[adj[u][i]]){
+            fillStack(adj,vis,adj[u][i],s);
+        }
+    }
+    s.push(u);
+}
+
+int kosaraju(int V, vector<int> adj[])
+{
+    // Your code here
+    bool vis[V]={false};
+    stack<int> s;
+    for(int i=0;i<V;i++){
+        if(!vis[i]){
+            fillStack(adj,vis,i,s);
+        }
+    }
+    
+    vector<int> tradj[V];
+    getTranspose(tradj,adj,V);
+    
+    memset(vis,0,sizeof(vis));
+    int cnt=0;
+    
+    while(!s.empty()){
+        int u=s.top();
+        s.pop();
+        
+        if(!vis[u]){
+            cnt++;
+            DFSUtil(tradj,vis,u);
+        }
+    }
+    
+    return cnt;
+}
