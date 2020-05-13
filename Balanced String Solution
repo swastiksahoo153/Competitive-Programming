@@ -1,0 +1,28 @@
+Lets say we have n/4+k1 'Q'(s), n/4+k2 'E'(s), n/4+k3 'W'(s) and n/4+k4 'R'(s),
+then we need the sub-array which contains minimum k1 'Q'(s), k2 'E'(s), k3 'W'(s) and k4 'R'(s).
+
+So we can find the shortest subarray fulfilling the above criteria by sliding window.
+
+Code:
+
+class Solution {
+public:
+    int balancedString(string s) {
+        int size=s.size()/4,ct=0,res=s.size(),j=0;
+        unordered_map<char,int> mp;
+        
+        for(auto i:s) mp[i]++;
+        
+        for(auto &i:mp){
+            i.second-=size;
+            if(i.second>0) ct+=i.second;
+        }  
+          
+        for(int i=0;i<s.size();i++){
+            if(mp[s[i]]-->0) --ct;            
+            while(mp[s[j]]<0) ++mp[s[j++]];
+            if(ct==0) res=min(res,i-j+1);
+        }
+        return res;        
+    }
+};
