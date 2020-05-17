@@ -1,0 +1,37 @@
+void topU(vector<int> adj[],vector<bool> &vis,stack<int> &stk,int u){
+    vis[u]=1;
+    
+    for(int i:adj[u]){
+        if(!vis[i]) topU(adj,vis,stk,i);
+    }
+    
+    stk.push(u);
+}
+
+string printOrder(string dict[], int N, int k) {
+    // Your code here
+    
+    //  create adj matrix
+    vector<int> adj[k];
+    for(int i=1;i<N;i++){
+        string word1=dict[i-1]; string word2=dict[i];
+        for(int j=0;j<min(word1.size(),word2.size());j++){
+           if(word1[j]!=word2[j]){
+               adj[word1[j]-'a'].push_back(word2[j]-'a');
+               break; 
+           } 
+        }
+    }
+    
+    stack<int> stk;
+    vector<bool> vis(k,0);
+    
+    for(int i=0;i<k;i++){
+        if(!vis[i]) topU(adj,vis,stk,i);
+    }
+    string ans;
+    while(!stk.empty()){
+        ans.push_back(char('a' + stk.top())); stk.pop();
+    }
+    return ans;
+}
